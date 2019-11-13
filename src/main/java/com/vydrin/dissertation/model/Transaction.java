@@ -2,8 +2,10 @@ package com.vydrin.dissertation.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Transaction implements Serializable {
@@ -21,6 +23,8 @@ public class Transaction implements Serializable {
     private long tx_index;
     private long vin_sz;
     private long vout_sz;
+    private Input[] inputs;
+    private Out[] out;
 
     @Override
     public String toString() {
@@ -38,7 +42,25 @@ public class Transaction implements Serializable {
                 ", tx_index=" + tx_index +
                 ", vin_sz=" + vin_sz +
                 ", vout_sz=" + vout_sz +
+                ", inputs=" + Arrays.toString(inputs) +
+                ", outs=" + Arrays.toString(out) +
                 '}';
+    }
+
+    public Out[] getOuts() {
+        return out;
+    }
+
+    public void setOuts(Out[] outs) {
+        this.out = outs;
+    }
+
+    public Input[] getInputs() {
+        return inputs;
+    }
+
+    public void setInputs(Input[] inputs) {
+        this.inputs = inputs;
     }
 
     public String getHash() {

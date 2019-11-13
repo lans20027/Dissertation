@@ -1,6 +1,8 @@
 package com.vydrin.dissertation;
 
 import com.vydrin.dissertation.model.Block;
+import com.vydrin.dissertation.model.Transaction;
+import com.vydrin.dissertation.services.BlockChainInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -29,13 +31,14 @@ public class DissertationApplication {
 
 
     @Bean
-    public CommandLineRunner run(RestTemplate restTemplate){
+    public CommandLineRunner run(BlockChainInfoService service){
         return args -> {
             log.info(String.format(blocksForTime,new Date().getTime()));
 
-            Block block = restTemplate.getForObject(String.format(blocksForTime,new Date().getTime()),Block.class);
+            Transaction tx = service.getSingleTx("b6f6991d03df0e2e04dafffcd6bc418aac66049e2cd74b80f14ac86db1e3f0da");
 
-            System.out.println(block);
+            log.info("blocks:" + tx);
+            log.info("inputs:" + tx.getInputs()[0].toString());
         };
     }
 
