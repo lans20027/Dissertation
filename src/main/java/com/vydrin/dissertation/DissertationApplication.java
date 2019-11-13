@@ -15,10 +15,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 
 @SpringBootApplication
@@ -45,9 +42,12 @@ public class DissertationApplication {
         return args -> {
             List<Block> blocks = service.getLastBlocks(10);
 
-
-
-            log.info(stats.averageInputAndOut(blocks));
+            long[][] arr = stats.averageInputAndOut(blocks);
+            for(int i =0; i < arr.length; i++)
+                for(int j =0; j < arr[i].length; ++j){
+                    if(arr[i][j] > 0)
+                    log.info(i + "-" + j + "===" + arr[i][j]);
+                }
         };
     }
 

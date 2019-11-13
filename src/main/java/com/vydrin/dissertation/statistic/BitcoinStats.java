@@ -22,7 +22,10 @@ public class BitcoinStats {
     private long inputs = 0;
     private long outs = 0;
 
-    public String averageInputAndOut(List<Block> list){
+
+    public long[][] averageInputAndOut(List<Block> list){
+        long[][] result = new long[1000][1000];
+
         for(Block block : list){
             Transaction[] txs = block.getTx();
             log.info("block tx:" + block.getHash());
@@ -30,10 +33,11 @@ public class BitcoinStats {
                 count++;
                 inputs += tx.getVin_sz();
                 outs += tx.getVout_sz();
+                result[(int) tx.getVin_sz()][(int) tx.getVout_sz()]++;
             }
         }
 
-        return "count:" + count + ",inputs:" + inputs + ",outs:" + outs;
+        return result;
     }
 
     public long getCount() {
