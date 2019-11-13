@@ -1,2 +1,2 @@
 # Dissertation
-Here is my dissertation works and thoughts
+Here is my dissertation works and thoughts.
