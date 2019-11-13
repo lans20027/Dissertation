@@ -8,14 +8,14 @@ import java.io.Serializable;
 public class Out implements Serializable {
     private String hash;
     private String value;
-    private String scripts;
+    private String script;
 
     @Override
     public String toString() {
         return "Out{" +
                 "hash='" + hash + '\'' +
                 ", value='" + value + '\'' +
-                ", scripts='" + scripts + '\'' +
+                ", scripts='" + script + '\'' +
                 '}';
     }
 
@@ -35,11 +35,11 @@ public class Out implements Serializable {
         this.value = value;
     }
 
-    public String getScripts() {
-        return scripts;
+    public String getScript() {
+        return script;
     }
 
-    public void setScripts(String scripts) {
-        this.scripts = scripts;
+    public void setScript(String script) {
+        this.script = script;
     }
 }
