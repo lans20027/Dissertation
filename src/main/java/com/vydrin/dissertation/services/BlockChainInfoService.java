@@ -67,9 +67,18 @@ public class BlockChainInfoService {
             tempHash = prevBlock.getPrev_block();
             i++;
         }
-
         return list;
+    }
 
+
+    public List<Transaction> getAllTransactions(List<Block> blocks){
+        ArrayList<Transaction> result = new ArrayList<>();
+
+        for(Block block : blocks){
+            result.addAll(List.of(block.getTx()) );
+        }
+
+        return result;
     }
 
 }

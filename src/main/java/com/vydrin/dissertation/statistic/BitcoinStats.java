@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.*;
 
 @Component
 public class BitcoinStats {
@@ -23,19 +23,47 @@ public class BitcoinStats {
     private long outs = 0;
 
 
-    public long[][] averageInputAndOut(List<Block> list){
-        long[][] result = new long[1000][1000];
+    public TreeSet<String> averageInputAndOut(List<Block> list){
+        TreeMap<String,Long> hm = new TreeMap<>();
+        TreeSet<String> result = new TreeSet<>((a,b) -> {
+            String aVal = a.split(":")[1];
+            String bVal = b.split(":")[1];
+
+            return Integer.compare(Integer.parseInt(bVal),Integer.parseInt(aVal));
+        });
 
         for(Block block : list){
             Transaction[] txs = block.getTx();
-            log.info("block tx:" + block.getHash());
             for(Transaction tx : txs){
                 count++;
                 inputs += tx.getVin_sz();
                 outs += tx.getVout_sz();
-                result[(int) tx.getVin_sz()][(int) tx.getVout_sz()]++;
+
+                String key = tx.getVin_sz() + "-" + tx.getVout_sz();
+
+                if(!hm.containsKey(key)){
+                    hm.put(key, 1L);
+                } else {
+                    hm.put(key, hm.get(key) + 1);
+                }
             }
         }
+
+
+
+        log.info("ALL BLOCKS:" + list.size());
+        log.info("ALL TX:" + count);
+        log.info("ALL INPUTS:" + inputs);
+        log.info("ALL OUTPUTS:" + outs);
+
+        for(Map.Entry<String,Long> e : hm.entrySet()){
+            result.add(e.getKey() + ":" + e.getValue());
+        }
+
+/*        for(Map.Entry<String,Long> e : hm.entrySet()){
+            if(e.getValue() > 10)
+                log.info(e.getKey() + ":" + e.getValue());
+        }*/
 
         return result;
     }

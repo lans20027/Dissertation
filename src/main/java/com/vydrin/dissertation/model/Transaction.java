@@ -23,6 +23,7 @@ public class Transaction implements Serializable {
     private long tx_index;
     private long vin_sz;
     private long vout_sz;
+
     private Input[] inputs;
     private Out[] out;
 
@@ -40,12 +41,50 @@ public class Transaction implements Serializable {
                 ", block_index=" + block_index +
                 ", time=" + time +
                 ", tx_index=" + tx_index +
-                ", vin_sz=" + vin_sz +
-                ", vout_sz=" + vout_sz +
-                ", inputs=" + Arrays.toString(inputs) +
-                ", outs=" + Arrays.toString(out) +
-                '}';
+                "\n, vin_sz=" + vin_sz +
+                "\n, vout_sz=" + vout_sz +
+                "\n, inputs=" + Arrays.toString(inputs) +
+                "\n, outs=" + Arrays.toString(out) +
+                "\n}";
     }
+
+
+    public Out[] getOut() {
+        return out;
+    }
+
+    public void setOut(Out[] out) {
+        this.out = out;
+    }
+
+    public long allInputs(){
+        long allInputs = 0;
+        for(Input input : inputs){
+            Input.PrevOut prevOut = input.getPrev_out();
+            if(prevOut != null){
+                allInputs += Long.valueOf(prevOut.getValue());
+            }
+        }
+
+        return allInputs;
+    }
+
+    public long allOuts(){
+        long allOuts = 0;
+
+        if(out == null) return 0;
+
+        for(Out out : out){
+            allOuts += Long.valueOf(out.getValue());
+        }
+
+        return allOuts;
+    }
+
+    public long getTransactionFee(){
+        return allInputs() - allOuts();
+    }
+
 
     public Out[] getOuts() {
         return out;

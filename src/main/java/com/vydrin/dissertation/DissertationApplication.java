@@ -4,6 +4,7 @@ import com.vydrin.dissertation.model.Block;
 import com.vydrin.dissertation.model.Blocks;
 import com.vydrin.dissertation.model.Transaction;
 import com.vydrin.dissertation.services.BlockChainInfoService;
+import com.vydrin.dissertation.services.DataToExcelService;
 import com.vydrin.dissertation.statistic.BitcoinStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,8 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 
@@ -26,6 +29,9 @@ public class DissertationApplication {
 
     @Autowired
     BitcoinStats stats;
+
+    @Autowired
+    DataToExcelService dataToExcelService;
 
     public static void main(String[] args) {
         SpringApplication.run(DissertationApplication.class, args);
@@ -40,15 +46,27 @@ public class DissertationApplication {
     @Bean
     public CommandLineRunner run(BlockChainInfoService service){
         return args -> {
-            List<Block> blocks = service.getLastBlocks(10);
+            /*List<Block> blocks = service.getLastBlocks(1);
 
-            long[][] arr = stats.averageInputAndOut(blocks);
-            for(int i =0; i < arr.length; i++)
-                for(int j =0; j < arr[i].length; ++j){
-                    if(arr[i][j] > 0)
-                    log.info(i + "-" + j + "===" + arr[i][j]);
-                }
+
+            List<Transaction> allTx = service.getAllTransactions(blocks);
+
+            for(int i =0; i < allTx.size(); i++) {
+                Transaction tx = allTx.get(i);
+
+                System.out.println(tx.allInputs() + " " + tx.allOuts() + " " + tx.getTransactionFee());
+            }*/
+
+            NavigableSet<Long> set = new TreeSet<Long>();
+
+            set.addAll(Arrays.asList(1L,4L,7L,9L,12L,20L));
+            System.out.println(set);
+
+            System.out.println("ceiling(10):" + set.ceiling(10L));
+            System.out.println("floor(15):" + set.floor(15L));
         };
     }
+
+
 
 }
