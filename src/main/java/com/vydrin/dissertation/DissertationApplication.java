@@ -46,24 +46,55 @@ public class DissertationApplication {
     @Bean
     public CommandLineRunner run(BlockChainInfoService service){
         return args -> {
-            /*List<Block> blocks = service.getLastBlocks(1);
+            List<Block> blocks = service.getLastBlocks(1);
 
 
             List<Transaction> allTx = service.getAllTransactions(blocks);
 
-            for(int i =0; i < allTx.size(); i++) {
-                Transaction tx = allTx.get(i);
+            NavigableMap<Long, List<Transaction>> map = new TreeMap<>();
+            long initial = 0;
+            long h = 500_000;
 
-                System.out.println(tx.allInputs() + " " + tx.allOuts() + " " + tx.getTransactionFee());
-            }*/
+            for(int i =0; i < 100; i++){
+                map.put(initial, new ArrayList<>());
+                initial += h;
+            }
 
-            NavigableSet<Long> set = new TreeSet<Long>();
+            for(int i =0; i < 10; i++){
+                initial += 50_000_000;
+                map.put(initial, new ArrayList<>());
+            }
 
-            set.addAll(Arrays.asList(1L,4L,7L,9L,12L,20L));
-            System.out.println(set);
 
-            System.out.println("ceiling(10):" + set.ceiling(10L));
-            System.out.println("floor(15):" + set.floor(15L));
+            int count = 0;
+            for(Transaction x : allTx){
+                Long l = map.ceilingKey(x.allOuts());
+                if(l == null){
+                    count++;
+//                    System.out.println(x.allOuts()/100_000_000.0);
+                }else {
+                    List<Transaction> list = map.get(l);
+                    list.add(x);
+                }
+            }
+
+            SortedSet<Map.Entry<Long,List<Transaction>>> sortedSet
+                    = new TreeSet<>(Comparator.comparingInt(o -> o.getKey().intValue()));
+
+            sortedSet.addAll(map.entrySet());
+
+            for(Map.Entry<Long,List<Transaction>> entry : sortedSet){
+                System.out.println(entry.getKey() + " - " + entry.getValue().size());
+            }
+
+//            dataToExcelService.txDistributionToFile("distribution.xls", sortedSet, allTx.size());
+            List<Transaction> listTx = map.get(100_000_000L);
+            if(listTx != null){
+                for (Transaction x : listTx){
+                    System.out.println(x.getHash() + " " + x.allInputs() + " " + x.allOuts()/100_000_000.0 );
+                }
+            }
+
         };
     }
 

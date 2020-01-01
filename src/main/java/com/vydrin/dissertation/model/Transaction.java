@@ -25,6 +25,7 @@ public class Transaction implements Serializable {
     private long vout_sz;
 
     private Input[] inputs;
+
     private Out[] out;
 
     @Override
