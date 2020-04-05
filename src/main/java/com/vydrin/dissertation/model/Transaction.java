@@ -50,16 +50,19 @@ public class Transaction implements Serializable {
     }
 
 
-    public Out[] getOut() {
+    public Out[] getOuts() {
         return out;
     }
 
-    public void setOut(Out[] out) {
+    public void setOuts(Out[] out) {
         this.out = out;
     }
 
     public long allInputs(){
         long allInputs = 0;
+
+        if(inputs == null) return 0;
+
         for(Input input : inputs){
             Input.PrevOut prevOut = input.getPrev_out();
             if(prevOut != null){
@@ -84,15 +87,6 @@ public class Transaction implements Serializable {
 
     public long getTransactionFee(){
         return allInputs() - allOuts();
-    }
-
-
-    public Out[] getOuts() {
-        return out;
-    }
-
-    public void setOuts(Out[] outs) {
-        this.out = outs;
     }
 
     public Input[] getInputs() {

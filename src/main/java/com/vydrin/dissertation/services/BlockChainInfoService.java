@@ -16,10 +16,10 @@ import java.util.List;
  * */
 @Service
 public class BlockChainInfoService {
-    private final String singleBlockURL = "https://blockchain.info/rawblock/%s";
-    private final String singleTxURL = "https://blockchain.info/rawtx/%s";
-    private final String blocksForOneDayURL = "https://blockchain.info/blocks/%d?format=json";
-    private final String latestBlockURL = "https://blockchain.info/latestblock";
+    private final String SINGLE_BLOCK_URL = "https://blockchain.info/rawblock/%s";
+    private final String SINGLE_TX_URL = "https://blockchain.info/rawtx/%s";
+    private final String BLOCKS_FOR_ONE_DAY_URL = "https://blockchain.info/blocks/%d?format=json";
+    private final String LATEST_BLOCK_URL = "https://blockchain.info/latestblock";
 
 
     @Autowired
@@ -27,30 +27,30 @@ public class BlockChainInfoService {
 
 
     public Block getSingleBlock(String blockHash){
-        return restTemplate.getForObject(String.format(singleBlockURL,blockHash),Block.class);
+        return restTemplate.getForObject(String.format(SINGLE_BLOCK_URL,blockHash),Block.class);
     }
 
 
     public Transaction getSingleTx(String txHash){
-        return restTemplate.getForObject(String.format(singleTxURL,txHash),Transaction.class);
+        return restTemplate.getForObject(String.format(SINGLE_TX_URL,txHash),Transaction.class);
     }
 
     public Blocks getBlocksForOneDay(long timeInMillis){
-        return restTemplate.getForObject(String.format(blocksForOneDayURL,timeInMillis),Blocks.class);
+        return restTemplate.getForObject(String.format(BLOCKS_FOR_ONE_DAY_URL,timeInMillis),Blocks.class);
     }
 
     public Blocks getFullBlockInfo(Blocks block){
         Block[] blocks = block.getBlocks();
 
         for(int i =0; i <1; i++){
-            blocks[i] = restTemplate.getForObject(String.format(singleBlockURL,blocks[i].getHash()),Block.class);
+            blocks[i] = restTemplate.getForObject(String.format(SINGLE_BLOCK_URL,blocks[i].getHash()),Block.class);
         }
 
         return block;
     }
 
     public Block getLatestBlock(){
-        return restTemplate.getForObject(latestBlockURL, Block.class);
+        return restTemplate.getForObject(LATEST_BLOCK_URL, Block.class);
     }
 
     public List<Block> getLastBlocks(int count){
@@ -62,7 +62,7 @@ public class BlockChainInfoService {
         String tempHash = initialBlock.getHash();
         int i = 0;
         while(i < count){
-            Block prevBlock = restTemplate.getForObject(String.format(singleBlockURL, tempHash), Block.class);
+            Block prevBlock = restTemplate.getForObject(String.format(SINGLE_BLOCK_URL, tempHash), Block.class);
             list.add(prevBlock);
             tempHash = prevBlock.getPrev_block();
             i++;
@@ -75,7 +75,7 @@ public class BlockChainInfoService {
         ArrayList<Transaction> result = new ArrayList<>();
 
         for(Block block : blocks){
-            result.addAll(List.of(block.getTx()) );
+            result.addAll(List.of(block.getTx()));
         }
 
         return result;
